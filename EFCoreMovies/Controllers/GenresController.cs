@@ -1,6 +1,7 @@
 ﻿using EFCoreMovies.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using EFCoreMovies.Utilities;
 
 namespace EFCoreMovies.Controllers
 {
@@ -16,10 +17,14 @@ namespace EFCoreMovies.Controllers
 
 
         [HttpGet]
-        public async Task<IEnumerable<Genre>> Get()
+        public async Task<IEnumerable<Genre>> Get(int page = 1, int recordsToTake = 2)
         {
             // use AsNoTracking for read only queries
-            return await context.Genres.AsNoTracking().ToListAsync();
+            return await context.Genres
+                .AsNoTracking()
+                .OrderBy(g => g.Name)
+                .Paginate(page, recordsToTake)
+                .ToListAsync();
         }
 
 
