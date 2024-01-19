@@ -14,10 +14,25 @@ namespace EFCoreMovies.Controllers
             this.context = context;
         }
 
+
         [HttpGet]
         public async Task<IEnumerable<Genre>> Get()
         {
-            return await context.Genres.ToListAsync();
+            // use AsNoTracking for read only queries
+            return await context.Genres.AsNoTracking().ToListAsync();
+        }
+
+
+        [HttpGet("first")]
+        public async Task<ActionResult<Genre>> GetFirst()
+        {
+            var genre = await context.Genres.FirstOrDefaultAsync(g => g.Name.Contains("x"));
+
+            if (genre is null)
+            {
+                return NotFound();
+            }
+            return genre;
         }
     }
 }
