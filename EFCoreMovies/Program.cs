@@ -10,6 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql("name=DefaultConnection", npgsql => npgsql.UseNetTopologySuite())
 );
