@@ -1,5 +1,6 @@
 ﻿using EFCoreMovies.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EFCoreMovies.Controllers
 {
@@ -14,9 +15,9 @@ namespace EFCoreMovies.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Genre> Get()
+        public async Task<IEnumerable<Genre>> Get()
         {
-            return context.Genres.ToList();
+            return await context.Genres.ToListAsync();
         }
     }
 }
