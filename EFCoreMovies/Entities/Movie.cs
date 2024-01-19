@@ -13,5 +13,10 @@ namespace EFCoreMovies.Entities
         public HashSet<Genre> Genres { get; set; }
         public HashSet<CinemaHall> CinemasHalls { get; set; }
         public HashSet<MovieActor> MoviesActors { get; set; }
+
+        internal object Select(Func<object, object> value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
