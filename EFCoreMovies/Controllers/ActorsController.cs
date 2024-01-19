@@ -10,7 +10,7 @@ namespace EFCoreMovies.Controllers
 {
     [ApiController]
     [Route("api/actors")]
-    public class ActorsController
+    public class ActorsController: ControllerBase
     {
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
