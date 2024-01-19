@@ -3,6 +3,8 @@ using AutoMapper.QueryableExtensions;
 using EFCoreMovies.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 
 namespace EFCoreMovies.Controllers
 {
@@ -26,6 +28,28 @@ namespace EFCoreMovies.Controllers
                 .ProjectTo<CinemaDTO>(mapper.ConfigurationProvider)
                 .ToListAsync();
         }
+
+        [HttpGet("closetome")]
+        public async Task<ActionResult> Get(double latitude, double longitude)
+        {
+            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
+
+            var myLocation = geometryFactory.CreatePoint(new Coordinate(longitude, latitude));
+
+            var maxDistanceInMeters = 2000; // 2 kms
+
+            var cinemas = await context.Cinemas
+                .OrderBy(c => c.Location.Distance(myLocation))
+                .Where(c => c.Location.IsWithinDistance(myLocation, maxDistanceInMeters))
+                .Select(c => new
+                {
+                    Name = c.Name,
+                    Distance = Math.Round(c.Location.Distance(myLocation))
+                }).ToListAsync();
+
+            return Ok(cinemas);
+        }
+
 
     }
 }
