@@ -34,5 +34,11 @@ namespace EFCoreMovies.Controllers
             }
             return genre;
         }
+
+        [HttpGet("filter")]
+        public async Task<IEnumerable<Genre>> Filter(string name)
+        {
+            return await context.Genres.Where(g => g.Name.Contains(name)).ToListAsync();
+        }
     }
 }
