@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EFCoreMovies.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,23 @@ namespace EFCoreMovies.Controllers
             }
 
             var movieDTO = mapper.Map<MovieDTO>(movie);
+
+            movieDTO.Cinemas = movieDTO.Cinemas.DistinctBy(m => m.Id).ToList();
+
+            return movieDTO;
+        }
+
+        [HttpGet("automapper/{id:int}")]
+        public async Task<ActionResult<MovieDTO>> GetWithAutoMapper(int id)
+        {
+            var movieDTO = await context.Movies
+                .ProjectTo<MovieDTO>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (movieDTO is null)
+            {
+                return NotFound();
+            }
 
             movieDTO.Cinemas = movieDTO.Cinemas.DistinctBy(m => m.Id).ToList();
 

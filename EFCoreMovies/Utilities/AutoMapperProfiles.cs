@@ -16,7 +16,10 @@ namespace EFCoreMovies.Utilities
 
             CreateMap<Genre, GenreDTO>();
             CreateMap<Movie, MovieDTO>()
-                .ForMember(dto => dto.Cinemas, ent => ent.MapFrom(p => p.CinemasHalls.Select(c => c.Cinema)))
+                .ForMember(dto => dto.Genres, ent => ent.MapFrom(p => p.Genres.OrderByDescending(g => g.Name)))
+                .ForMember(dto => dto.Cinemas, ent => ent.MapFrom(p => p.CinemasHalls
+                                                                            .OrderByDescending(g => g.Cinema.Name)
+                                                                            .Select(c => c.Cinema)))
                 .ForMember(dto => dto.Actors, ent => ent.MapFrom(p => p.MoviesActors.Select(c => c.Actor)));
         }
     }
