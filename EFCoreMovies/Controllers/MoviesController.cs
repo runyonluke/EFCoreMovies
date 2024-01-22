@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using EFCoreMovies.DTOs;
+using EFCoreMovies.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -171,6 +172,29 @@ namespace EFCoreMovies.Controllers
             var movies = await moviesQueryable.Include(m => m.Genres).ToListAsync();
 
             return mapper.Map<List<MovieDTO>>(movies);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Post(MovieCreationDTO movieCreationDTO)
+        {
+            var movie = mapper.Map<Movie>(movieCreationDTO);
+
+            movie.Genres.ForEach(g => context.Entry(g).State = EntityState.Unchanged);
+            movie.CinemasHalls.ForEach(ch => context.Entry(ch).State = EntityState.Unchanged);
+
+            if (movie.MoviesActors is not null)
+            {
+                for (int i = 0; i < movie.MoviesActors.Count; i++)
+                {
+                    movie.MoviesActors[i].Order = i + 1;
+                }
+            }
+
+            context.Add(movie);
+
+            await context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

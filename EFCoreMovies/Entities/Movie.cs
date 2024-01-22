@@ -10,9 +10,9 @@ namespace EFCoreMovies.Entities
         public DateTime ReleaseDate { get; set; }
         //[Unicode(false)]
         public string PosterURL { get; set; }
-        public HashSet<Genre> Genres { get; set; }
-        public HashSet<CinemaHall> CinemasHalls { get; set; }
-        public HashSet<MovieActor> MoviesActors { get; set; }
+        public List<Genre> Genres { get; set; }
+        public List<CinemaHall> CinemasHalls { get; set; }
+        public List<MovieActor> MoviesActors { get; set; }
 
         internal object Select(Func<object, object> value)
         {
