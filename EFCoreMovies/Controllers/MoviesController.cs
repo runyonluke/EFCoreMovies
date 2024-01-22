@@ -136,5 +136,41 @@ namespace EFCoreMovies.Controllers
 
             return Ok(genresCount);
         }
+
+        // FromQuery means that the values from this class will come from Query strings
+        // needed because MovieFilterDTO is a complex type
+        [HttpGet("filter")]
+        public async Task<ActionResult<IEnumerable<MovieDTO>>> Filter([FromQuery] MovieFilterDTO movieFilterDTO)
+        {
+            var moviesQueryable = context.Movies.AsQueryable();
+
+            //only run if there is a title
+            if (!string.IsNullOrEmpty(movieFilterDTO.Title))
+            {
+                moviesQueryable = moviesQueryable.Where(m => m.Title.Contains(movieFilterDTO.Title));
+            }
+
+            // Make sure InCinemas exists in both movieFilterDTO and movieQueryable
+            if (movieFilterDTO.InCinemas)
+            {
+                moviesQueryable = moviesQueryable.Where(m => m.InCinemas);
+            }
+
+            // We know they are upcoming if they occur after today
+            if (movieFilterDTO.UpcomingReleases)
+            {
+                moviesQueryable = moviesQueryable.Where(m => m.ReleaseDate > DateTime.Today);
+            }
+
+            // Find only genre's with a specific Id
+            if (movieFilterDTO.GenreId != 0)
+            {
+                moviesQueryable = moviesQueryable.Where(m => m.Genres.Select(g => g.Id).Contains(movieFilterDTO.GenreId));
+            }
+
+            var movies = await moviesQueryable.Include(m => m.Genres).ToListAsync();
+
+            return mapper.Map<List<MovieDTO>>(movies);
+        }
     }
 }
