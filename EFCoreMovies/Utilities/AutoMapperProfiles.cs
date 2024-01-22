@@ -15,6 +15,8 @@ namespace EFCoreMovies.Utilities
                 .ForMember(dto => dto.Longitude, ent => ent.MapFrom(p => p.Location.X));
 
             CreateMap<Genre, GenreDTO>();
+            CreateMap<GenreCreationDTO, Genre>();
+
             CreateMap<Movie, MovieDTO>()
                 .ForMember(dto => dto.Genres, ent => ent.MapFrom(p => p.Genres.OrderByDescending(g => g.Name)))
                 .ForMember(dto => dto.Cinemas, ent => ent.MapFrom(p => p.CinemasHalls
