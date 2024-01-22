@@ -5,6 +5,7 @@ using EFCoreMovies.Utilities;
 using EFCoreMovies.DTOs;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using EFCoreMovies.Entities;
 
 namespace EFCoreMovies.Controllers
 {
@@ -38,6 +39,17 @@ namespace EFCoreMovies.Controllers
         {
             // use AsNoTracking for read only queries
             return await context.Actors.Select(a => a.Id).ToListAsync();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Post(ActorCreationDTO actorCreationDTO)
+        {
+            var actor = mapper.Map<Actor>(actorCreationDTO);
+
+            context.Add(actor);
+            context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

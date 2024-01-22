@@ -14,6 +14,9 @@ namespace EFCoreMovies.Entities.Configurations
             // we used the override ConfigureConventions above
             //modelBuilder.Entity<Actor>().Property(p => p.DateOfBirth).HasColumnType("date");
             builder.Property(p => p.Biography).HasColumnType("text");
+
+            // we don't have to do this since we are following the convention by doing "_<lowerCaseFirstLetter><restOfWord>"
+            //builder.Property(p => p.Name).HasField("_name");
         }
     }
 }
