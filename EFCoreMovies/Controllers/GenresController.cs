@@ -64,5 +64,24 @@ namespace EFCoreMovies.Controllers
             await context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpPost("several")]
+        public async Task<ActionResult> Post(GenreCreationDTO[] genresDTO)
+        {
+            var genres = mapper.Map<Genre[]>(genresDTO);
+
+            // for adding multiple, this is an option, but it is not good
+            //foreach (var genre in genres)
+            //{
+            //    context.Add(genre);
+            //}
+
+            // a better option than above
+            context.AddRange(genres);
+
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }
