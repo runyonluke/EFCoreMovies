@@ -75,5 +75,42 @@ namespace EFCoreMovies.Controllers
 
             return Ok(movieDTO);
         }
+
+        // not usually used because of performance
+        [HttpGet("explicitLoading/{id:int}")]
+        public async Task<ActionResult<MovieDTO>> GetExplicit(int id)
+        {
+            var movie = await context.Movies.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (movie is null)
+            {
+                return NotFound();
+            }
+
+            var genresCount = await context.Entry(movie).Collection(p => p.Genres).Query().CountAsync();
+            var movieDTO = mapper.Map<MovieDTO>(movie);
+
+            return Ok(new
+            {
+                Id = movieDTO.Id,
+                Title = movieDTO.Title,
+                GenresCount = genresCount
+            });
+        }
+
+        // not usually used because of performance
+        // queries database too many times, n + 1 problem
+        [HttpGet("lazyloading/{id:int}")]
+        public async Task<ActionResult<MovieDTO>> GetLazyLoading(int id)
+        {
+            var movie = await context.Movies.FirstOrDefaultAsync(x => x.Id == id);
+            var movieDTO = mapper.Map<MovieDTO>(movie);
+
+            movieDTO.Cinemas = movieDTO.Cinemas.DistinctBy(x => x.Id).ToList();
+
+            return movieDTO;
+        }
+
+
     }
 }
