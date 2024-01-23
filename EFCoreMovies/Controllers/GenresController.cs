@@ -100,5 +100,21 @@ namespace EFCoreMovies.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var genre = await context.Genres.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (genre is null)
+            {
+                return NotFound();
+            }
+
+            context.Remove(genre);
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }
