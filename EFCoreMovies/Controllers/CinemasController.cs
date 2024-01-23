@@ -100,5 +100,52 @@ namespace EFCoreMovies.Controllers
             return Ok();
         }
 
+
+        [HttpPut("cinemaOffer")]
+        public async Task<ActionResult> PutCinemaOffer(CinemaOffer cinemaOffer)
+        {
+            context.Update(cinemaOffer);
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult> Get(int id)
+        {
+            var cinema = await context.Cinemas
+                .Include(c => c.CinemasHalls)
+                .Include(c => c.CinemaOffer)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (cinema is null)
+            {
+                return NotFound();
+            }
+
+            cinema.Location = null;
+
+            return Ok(cinema);
+        }
+
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Put(CinemaCreationDTO cinemaCreationDTO, int id)
+        {
+            var cinemaDB = await context.Cinemas
+                .Include(c => c.CinemasHalls)
+                .Include(c => c.CinemaOffer)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (cinemaDB is null)
+            {
+                return NotFound();
+            }
+
+            cinemaDB = mapper.Map(cinemaCreationDTO, cinemaDB);
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }
