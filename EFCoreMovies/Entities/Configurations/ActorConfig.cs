@@ -17,6 +17,9 @@ namespace EFCoreMovies.Entities.Configurations
 
             // we don't have to do this since we are following the convention by doing "_<lowerCaseFirstLetter><restOfWord>"
             //builder.Property(p => p.Name).HasField("_name");
+
+            // redundant, already in Actor.cs
+            //builder.Ignore(p => p.Age);
         }
     }
 }
