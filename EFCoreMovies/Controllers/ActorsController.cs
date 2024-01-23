@@ -23,14 +23,13 @@ namespace EFCoreMovies.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ActorDTO>> Get(int page = 1, int recordsToTake = 2)
+        public async Task<IEnumerable<ActorDTO>> Get()
         {
             // use AsNoTracking for read only queries
             return await context.Actors
                 .AsNoTracking()
                 .ProjectTo<ActorDTO>(mapper.ConfigurationProvider)
                 .OrderBy(a => a.Name)
-                .Paginate(page, recordsToTake)
                 .ToListAsync();
         }
 
@@ -49,6 +48,23 @@ namespace EFCoreMovies.Controllers
             context.Add(actor);
             context.SaveChangesAsync();
 
+            return Ok();
+        }
+
+        // connected model
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Put(ActorCreationDTO actorCreationDTO, int id)
+        {
+            var actor = await context.Actors.FirstOrDefaultAsync(a => a.Id == id);
+
+            if (actor is null)
+            {
+                return NotFound();
+            }
+
+            var actorDB = mapper.Map(actorCreationDTO, actor);
+            await context.SaveChangesAsync();
+            
             return Ok();
         }
     }

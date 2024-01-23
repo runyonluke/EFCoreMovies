@@ -65,6 +65,23 @@ namespace EFCoreMovies.Controllers
             return Ok();
         }
 
+        [HttpPost("add2")]
+        public async Task<ActionResult> Add2(int id)
+        {
+            var genre = await context.Genres.FirstOrDefaultAsync(g => g.Id == id);
+
+            if (genre is null)
+            {
+                return NotFound();
+            }
+
+            genre.Name += " 2";
+            await context.SaveChangesAsync();
+ 
+            return Ok();
+        }
+
+
         [HttpPost("several")]
         public async Task<ActionResult> Post(GenreCreationDTO[] genresDTO)
         {
