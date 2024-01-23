@@ -27,7 +27,6 @@ namespace EFCoreMovies.Controllers
             // use AsNoTracking for read only queries
             return await context.Genres
                 .AsNoTracking()
-                .Where(g => !g.IsDeleted)
                 .OrderBy(g => g.Name)
                 .ToListAsync();
         }
@@ -129,6 +128,22 @@ namespace EFCoreMovies.Controllers
             }
 
             genre.IsDeleted = true;
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost("restore/{id:int}")]
+        public async Task<ActionResult> Restore(int id)
+        {
+            var genre = await context.Genres.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id == id);
+
+            if (genre is null)
+            {
+                return NotFound();
+            }
+
+            genre.IsDeleted = false;
             await context.SaveChangesAsync();
 
             return Ok();

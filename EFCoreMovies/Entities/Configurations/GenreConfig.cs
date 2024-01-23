@@ -12,6 +12,8 @@ namespace EFCoreMovies.Entities.Configurations
             builder.Property(p => p.Name)
                 //.HasColumnName("GenreName")
                 .HasMaxLength(150).IsRequired();
+
+            builder.HasQueryFilter(g => !g.IsDeleted);
         }
     }
 }
