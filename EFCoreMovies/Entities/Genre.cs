@@ -12,6 +12,7 @@ namespace EFCoreMovies.Entities
         //[Required]
         //[Column("GenreName")]
         public string Name { get; set; }
+        public bool IsDeleted { get; set; }
         public HashSet<Movie> Movies { get; set; }
     }
 }

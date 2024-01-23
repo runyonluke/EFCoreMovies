@@ -27,6 +27,7 @@ namespace EFCoreMovies.Controllers
             // use AsNoTracking for read only queries
             return await context.Genres
                 .AsNoTracking()
+                .Where(g => !g.IsDeleted)
                 .OrderBy(g => g.Name)
                 .ToListAsync();
         }
@@ -112,6 +113,22 @@ namespace EFCoreMovies.Controllers
             }
 
             context.Remove(genre);
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpDelete("softdelete/{id:int}")]
+        public async Task<ActionResult> SoftDelete(int id)
+        {
+            var genre = await context.Genres.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (genre is null)
+            {
+                return NotFound();
+            }
+
+            genre.IsDeleted = true;
             await context.SaveChangesAsync();
 
             return Ok();
