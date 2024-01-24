@@ -14,7 +14,11 @@ namespace EFCoreMovies.Entities.Configurations
                 .HasMaxLength(150).IsRequired();
 
             builder.HasQueryFilter(g => !g.IsDeleted);
+
             builder.HasIndex(p => p.Name).IsUnique().HasFilter("public.\"Genres\".\"IsDeleted\" = 'false'");
+
+            // shadow property
+            builder.Property<DateTime>("CreatedDate").HasColumnType("timestamp").HasDefaultValueSql("NOW()");
         }
     }
 }

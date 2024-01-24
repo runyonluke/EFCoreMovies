@@ -27,8 +27,30 @@ namespace EFCoreMovies.Controllers
             // use AsNoTracking for read only queries
             return await context.Genres
                 .AsNoTracking()
-                .OrderBy(g => g.Name)
+                // use EF.Property to access shadow properties
+                .OrderByDescending(g => EF.Property<DateTime>(g, "CreatedDate"))
                 .ToListAsync();
+        }
+
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Genre>> Get(int id)
+        {
+            var genre = await context.Genres.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (genre is null)
+            {
+                return NotFound();
+            }
+
+            var createdDate = context.Entry(genre).Property<DateTime>("CreatedDate").CurrentValue;
+
+            return Ok(new
+            {
+                Id = genre.Id,
+                Name = genre.Name,
+                CreateDate = createdDate
+            });
         }
 
 
