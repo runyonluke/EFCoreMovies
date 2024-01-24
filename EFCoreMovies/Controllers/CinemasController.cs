@@ -73,11 +73,13 @@ namespace EFCoreMovies.Controllers
                     new CinemaHall()
                     {
                         Cost = 200,
+                        Currency = Currency.DominicanPeso,
                         CinemaHallType = CinemaHallType.TwoDimensions
                     },
                     new CinemaHall()
                     {
                         Cost = 250,
+                        Currency = Currency.USDollar,
                         CinemaHallType = CinemaHallType.ThreeDimensions
                     }
                 },

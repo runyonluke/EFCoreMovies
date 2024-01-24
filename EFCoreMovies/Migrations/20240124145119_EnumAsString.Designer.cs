@@ -3,6 +3,7 @@ using System;
 using EFCoreMovies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EFCoreMovies.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240124145119_EnumAsString")]
+    partial class EnumAsString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,10 +223,6 @@ namespace EFCoreMovies.Migrations
                         .HasPrecision(9, 2)
                         .HasColumnType("numeric(9,2)");
 
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CinemaId");
@@ -237,64 +235,56 @@ namespace EFCoreMovies.Migrations
                             Id = 5,
                             CinemaHallType = "TwoDimensions",
                             CinemaId = 3,
-                            Cost = 250m,
-                            Currency = ""
+                            Cost = 250m
                         },
                         new
                         {
                             Id = 6,
                             CinemaHallType = "ThreeDimensions",
                             CinemaId = 3,
-                            Cost = 330m,
-                            Currency = ""
+                            Cost = 330m
                         },
                         new
                         {
                             Id = 7,
                             CinemaHallType = "CXC",
                             CinemaId = 3,
-                            Cost = 450m,
-                            Currency = ""
+                            Cost = 450m
                         },
                         new
                         {
                             Id = 8,
                             CinemaHallType = "TwoDimensions",
                             CinemaId = 4,
-                            Cost = 250m,
-                            Currency = ""
+                            Cost = 250m
                         },
                         new
                         {
                             Id = 1,
                             CinemaHallType = "TwoDimensions",
                             CinemaId = 1,
-                            Cost = 220m,
-                            Currency = ""
+                            Cost = 220m
                         },
                         new
                         {
                             Id = 2,
                             CinemaHallType = "ThreeDimensions",
                             CinemaId = 1,
-                            Cost = 320m,
-                            Currency = ""
+                            Cost = 320m
                         },
                         new
                         {
                             Id = 3,
                             CinemaHallType = "TwoDimensions",
                             CinemaId = 2,
-                            Cost = 200m,
-                            Currency = ""
+                            Cost = 200m
                         },
                         new
                         {
                             Id = 4,
                             CinemaHallType = "ThreeDimensions",
                             CinemaId = 2,
-                            Cost = 290m,
-                            Currency = ""
+                            Cost = 290m
                         });
                 });
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCoreMovies.Entities.Conversions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Emit;
 
@@ -9,7 +10,11 @@ namespace EFCoreMovies.Entities.Configurations
         public void Configure(EntityTypeBuilder<CinemaHall> builder)
         {
             builder.Property(p => p.Cost).HasPrecision(precision: 9, scale: 2);
-            builder.Property(p => p.CinemaHallType).HasDefaultValue(CinemaHallType.TwoDimensions);
+            builder.Property(p => p.CinemaHallType)
+                .HasDefaultValue(CinemaHallType.TwoDimensions)
+                .HasConversion<string>();
+
+            builder.Property(p => p.Currency).HasConversion<CurrencyToSymbolConverter>();
         }
     }
 }
