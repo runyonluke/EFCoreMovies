@@ -47,13 +47,21 @@ namespace EFCoreMovies.Controllers
         [HttpGet("filter")]
         public async Task<IEnumerable<Genre>> Filter(string name)
         {
-            return await context.Genres.Where(g => g.Name.Contains(name)).ToListAsync();
+            return await context.Genres.IgnoreQueryFilters().Where(g => g.Name.Contains(name)).ToListAsync();
         }
 
         [HttpPost]
         public async Task<ActionResult> Post(GenreCreationDTO genreCreationDTO)
         {
+            var genreExists = await context.Genres.AnyAsync(g => g.Name == genreCreationDTO.Name);
+
+            if (genreExists)
+            {
+                return BadRequest($"The genre with name \"{genreCreationDTO.Name}\" already exists");
+            }
+
             var genre = mapper.Map<Genre>(genreCreationDTO);
+
             // remember that this isn't actually inserting the record in the database
             // EF tracks entities with statuses
             // EF is smart, you don't need to specify "context.Genres.Add()"
