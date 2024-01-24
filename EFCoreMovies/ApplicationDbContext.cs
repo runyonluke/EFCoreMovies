@@ -34,6 +34,18 @@ namespace EFCoreMovies
             // tutorial has below, modified for pg
             //modelBuilder.Entity<CinemaWithoutLocation>().ToSqlQuery("Select Id, Name FROM Cinemas").ToView(null);
             modelBuilder.Entity<CinemaWithoutLocation>().ToSqlQuery("SELECT \"Id\", \"Name\" FROM public.\"Cinemas\"").ToView(null);
+
+            foreach(var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(string) 
+                        && property.Name.Contains("URL", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        property.SetIsUnicode(false);
+                    }
+                }
+            }
         }
 
         public DbSet<Genre> Genres { get; set; }
