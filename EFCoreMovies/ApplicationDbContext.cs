@@ -1,4 +1,5 @@
 ﻿using EFCoreMovies.Entities;
+using EFCoreMovies.Entities.Keyless;
 using EFCoreMovies.Entities.Seeding;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -24,10 +25,13 @@ namespace EFCoreMovies
             base.OnModelCreating(modelBuilder);
             // the below method would have to be repeated for every config file
             //modelBuilder.ApplyConfiguration(new GenreConfig());
-
             // the below method does not have to be repeated for every config file
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             Module3Seeding.Seed(modelBuilder);
+
+            // tutorial has below, modified for pg
+            //modelBuilder.Entity<CinemaWithoutLocation>().ToSqlQuery("Select Id, Name FROM Cinemas").ToView(null);
+            modelBuilder.Entity<CinemaWithoutLocation>().ToSqlQuery("SELECT \"Id\", \"Name\" FROM public.\"Cinemas\"").ToView(null);
         }
 
         public DbSet<Genre> Genres { get; set; }
@@ -37,5 +41,6 @@ namespace EFCoreMovies
         public DbSet<CinemaOffer> CinemaOffers { get; set; }
         public DbSet<CinemaHall> CinemasHalls { get; set; }
         public DbSet<MovieActor> MoviesActors { get; set; }
+        public DbSet<CinemaWithoutLocation> CinemaWithoutLocations { get; set; }
     }
 }

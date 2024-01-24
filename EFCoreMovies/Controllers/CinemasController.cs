@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using EFCoreMovies.DTOs;
 using EFCoreMovies.Entities;
+using EFCoreMovies.Entities.Keyless;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite;
@@ -29,6 +30,15 @@ namespace EFCoreMovies.Controllers
                 .ProjectTo<CinemaDTO>(mapper.ConfigurationProvider)
                 .ToListAsync();
         }
+
+        [HttpGet("withoutLocation")]
+        public async Task<IEnumerable<CinemaWithoutLocation>> GetWithoutLocation()
+        {
+            // use below comment to get from database without have to declare a DbSet in ApplicationDbContext
+            // called Keyless Entries
+            // return await context.Set<CinemaWithoutLocation>().ToListAsync();
+            return await context.CinemaWithoutLocations.ToListAsync();
+        } 
 
         [HttpGet("closetome")]
         public async Task<ActionResult> Get(double latitude, double longitude)
