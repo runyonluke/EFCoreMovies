@@ -29,6 +29,8 @@ namespace EFCoreMovies
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             Module3Seeding.Seed(modelBuilder);
 
+            modelBuilder.Entity<MovieWithCounts>().ToView("MovieWithCounts");
+
             // tutorial has below, modified for pg
             //modelBuilder.Entity<CinemaWithoutLocation>().ToSqlQuery("Select Id, Name FROM Cinemas").ToView(null);
             modelBuilder.Entity<CinemaWithoutLocation>().ToSqlQuery("SELECT \"Id\", \"Name\" FROM public.\"Cinemas\"").ToView(null);
