@@ -12,8 +12,12 @@ namespace EFCoreMovies.Entities.Configurations
             // configure one-to-one relationship between tables
             builder.HasOne(c => c.CinemaOffer).WithOne().HasForeignKey<CinemaOffer>(co => co.CinemaId);
 
-            // not necessary because of convention
-            //builder.HasMany(c => c.CinemasHalls).WithOne(ch => ch.Cinema).HasForeignKey(ch => ch.CinemaId);
+            builder.HasMany(c => c.CinemasHalls).WithOne(ch => ch.Cinema)
+                // not necessary because of convention
+                //.HasForeignKey(ch => ch.CinemaId)
+                // in the case where a rule would be to have to delete cinema halls before a cinema is deleted
+                // will through an error when a cinema with existing cinema halls exist
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
