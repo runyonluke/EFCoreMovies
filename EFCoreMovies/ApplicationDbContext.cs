@@ -28,6 +28,7 @@ namespace EFCoreMovies
             // the below method does not have to be repeated for every config file
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             Module3Seeding.Seed(modelBuilder);
+            Module6Seeding.Seed(modelBuilder);
 
             modelBuilder.Entity<MovieWithCounts>().ToView("MovieWithCounts");
 
@@ -56,5 +57,7 @@ namespace EFCoreMovies
         public DbSet<CinemaHall> CinemasHalls { get; set; }
         public DbSet<MovieActor> MoviesActors { get; set; }
         public DbSet<CinemaWithoutLocation> CinemaWithoutLocations { get; set; }
+        public DbSet<Person> People { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }
