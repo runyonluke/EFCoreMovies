@@ -18,6 +18,15 @@ namespace EFCoreMovies.Entities.Configurations
                 // in the case where a rule would be to have to delete cinema halls before a cinema is deleted
                 // will through an error when a cinema with existing cinema halls exist
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(c => c.CinemaDetail).WithOne(cd => cd.Cinema).HasForeignKey<CinemaDetail>(cd => cd.Id);
+
+            builder.OwnsOne(c => c.Address, add =>
+            {
+                add.Property(p => p.Street).HasColumnName("Street");
+                add.Property(p => p.Country).HasColumnName("Country");
+                add.Property(p => p.Province).HasColumnName("Province");
+            });
         }
     }
 }

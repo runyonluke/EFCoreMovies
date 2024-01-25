@@ -3,6 +3,7 @@ using System;
 using EFCoreMovies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EFCoreMovies.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240125214338_CinemaDetails")]
+    partial class CinemaDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -788,40 +790,6 @@ namespace EFCoreMovies.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Cinema", b =>
-                {
-                    b.OwnsOne("EFCoreMovies.Entities.Address", "Address", b1 =>
-                        {
-                            b1.Property<int>("CinemaId")
-                                .HasColumnType("integer");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasMaxLength(150)
-                                .HasColumnType("character varying(150)")
-                                .HasColumnName("Country");
-
-                            b1.Property<string>("Province")
-                                .HasMaxLength(150)
-                                .HasColumnType("character varying(150)")
-                                .HasColumnName("Province");
-
-                            b1.Property<string>("Street")
-                                .HasMaxLength(150)
-                                .HasColumnType("character varying(150)")
-                                .HasColumnName("Street");
-
-                            b1.HasKey("CinemaId");
-
-                            b1.ToTable("Cinemas");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CinemaId");
-                        });
-
-                    b.Navigation("Address");
-                });
-
             modelBuilder.Entity("CinemaHallMovie", b =>
                 {
                     b.HasOne("EFCoreMovies.Entities.CinemaHall", null)
@@ -835,65 +803,6 @@ namespace EFCoreMovies.Migrations
                         .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EFCoreMovies.Entities.Actor", b =>
-                {
-                    b.OwnsOne("EFCoreMovies.Entities.Address", "BillingAddress", b1 =>
-                        {
-                            b1.Property<int>("ActorId")
-                                .HasColumnType("integer");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasMaxLength(150)
-                                .HasColumnType("character varying(150)");
-
-                            b1.Property<string>("Province")
-                                .HasMaxLength(150)
-                                .HasColumnType("character varying(150)");
-
-                            b1.Property<string>("Street")
-                                .HasMaxLength(150)
-                                .HasColumnType("character varying(150)");
-
-                            b1.HasKey("ActorId");
-
-                            b1.ToTable("Actors");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ActorId");
-                        });
-
-                    b.OwnsOne("EFCoreMovies.Entities.Address", "HomeAddress", b1 =>
-                        {
-                            b1.Property<int>("ActorId")
-                                .HasColumnType("integer");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasMaxLength(150)
-                                .HasColumnType("character varying(150)");
-
-                            b1.Property<string>("Province")
-                                .HasMaxLength(150)
-                                .HasColumnType("character varying(150)");
-
-                            b1.Property<string>("Street")
-                                .HasMaxLength(150)
-                                .HasColumnType("character varying(150)");
-
-                            b1.HasKey("ActorId");
-
-                            b1.ToTable("Actors");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ActorId");
-                        });
-
-                    b.Navigation("BillingAddress");
-
-                    b.Navigation("HomeAddress");
                 });
 
             modelBuilder.Entity("EFCoreMovies.Entities.CinemaDetail", b =>

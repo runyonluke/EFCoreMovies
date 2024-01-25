@@ -8,4 +8,6 @@ public class Cinema
     public Point Location { get; set; }
     public CinemaOffer CinemaOffer { get; set; }
     public HashSet<CinemaHall> CinemasHalls { get; set; }
+    public Address Address { get; set; }
+    public CinemaDetail CinemaDetail { get; set; }
 }
